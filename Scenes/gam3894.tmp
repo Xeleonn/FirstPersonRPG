@@ -1,0 +1,41 @@
+[gd_scene load_steps=9 format=3 uid="uid://dthawepmlko7r"]
+
+[ext_resource type="Script" path="res://Scenes/game.gd" id="1_i3dgg"]
+[ext_resource type="Texture2D" uid="uid://b7fkfrgpdjq48" path="res://Assets/Skyboxes/kloofendal_48d_partly_cloudy_puresky_4k.exr" id="2_4acwk"]
+[ext_resource type="PackedScene" uid="uid://cewcngo4eicv5" path="res://Scenes/test_map.tscn" id="3_lcfve"]
+[ext_resource type="PackedScene" uid="uid://bryqisxjthpc4" path="res://Scenes/player.tscn" id="4_lxpka"]
+[ext_resource type="PackedScene" uid="uid://bsdwukko8lo8k" path="res://Scenes/ui_save_panel.tscn" id="5_6l5xh"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_m8fjt"]
+panorama = ExtResource("2_4acwk")
+
+[sub_resource type="Sky" id="Sky_lkipb"]
+sky_material = SubResource("PanoramaSkyMaterial_m8fjt")
+
+[sub_resource type="Environment" id="Environment_5qwk3"]
+background_mode = 2
+sky = SubResource("Sky_lkipb")
+tonemap_mode = 2
+glow_enabled = true
+volumetric_fog_detail_spread = 1.97926
+volumetric_fog_sky_affect = 0.811
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_i3dgg")
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+environment = SubResource("Environment_5qwk3")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="UISavePanel" parent="UI" instance=ExtResource("5_6l5xh")]
+
+[node name="TestMap" parent="." instance=ExtResource("3_lcfve")]
+
+[node name="Player" parent="." instance=ExtResource("4_lxpka")]

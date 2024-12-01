@@ -1,0 +1,79 @@
+[gd_scene load_steps=12 format=3 uid="uid://bryqisxjthpc4"]
+
+[ext_resource type="Script" path="res://Scripts/Player/Player.gd" id="1_2xe8y"]
+[ext_resource type="Texture2D" uid="uid://cfg6s6xhouij5" path="res://Assets/Models/Weapons/Greatsword/SHD_greatsword_Base_Color.tga" id="2_bmvmy"]
+[ext_resource type="Texture2D" uid="uid://dky1nvntm4ypg" path="res://Assets/Models/Weapons/Greatsword/SHD_greatsword_Mixed_AO.tga" id="3_bfsf2"]
+[ext_resource type="Texture2D" uid="uid://h6nustpkyjnf" path="res://Assets/Models/Weapons/Greatsword/SHD_greatsword_Metallic.tga" id="4_vu4ku"]
+[ext_resource type="Texture2D" uid="uid://brpc3ehwtco85" path="res://Assets/Models/Weapons/Greatsword/SHD_greatsword_Normal_OpenGL.tga" id="5_3qx31"]
+[ext_resource type="Texture2D" uid="uid://dpujllaf5ax13" path="res://Assets/Models/Weapons/Greatsword/SHD_greatsword_Roughness.tga" id="6_7ay3v"]
+[ext_resource type="ArrayMesh" uid="uid://dykg4xtf3scuq" path="res://Assets/Models/Weapons/Greatsword/greatsword.obj" id="7_qdjb6"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_68umm"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rc01p"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7gdrp"]
+height = 1.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hisyc"]
+albedo_texture = ExtResource("2_bmvmy")
+metallic = 1.0
+metallic_texture = ExtResource("4_vu4ku")
+roughness_texture = ExtResource("6_7ay3v")
+normal_enabled = true
+normal_texture = ExtResource("5_3qx31")
+ao_enabled = true
+ao_texture = ExtResource("3_bfsf2")
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_2xe8y")
+camera_speed = 0.001
+camera_rotation_amount = 0.05
+weapon_sway_amount = 0.05
+weapon_rotation_amount = 0.007
+
+[node name="PlayerMesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
+mesh = SubResource("CapsuleMesh_68umm")
+
+[node name="StandingCollisionShape" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_rc01p")
+
+[node name="CrouchingCollisionShape" type="CollisionShape3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.599936, 0)
+visible = false
+shape = SubResource("CapsuleShape3D_7gdrp")
+disabled = true
+
+[node name="RayCast3D" type="RayCast3D" parent="."]
+unique_name_in_owner = true
+visible = false
+target_position = Vector3(0, 2, 0)
+
+[node name="Neck" type="Node3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="Head" type="Node3D" parent="Neck"]
+unique_name_in_owner = true
+
+[node name="Camera3D" type="Camera3D" parent="Neck/Head"]
+unique_name_in_owner = true
+fov = 100.0
+
+[node name="WeaponArm" type="Node3D" parent="Neck/Head"]
+transform = Transform3D(0.988688, -0.0411424, -0.144231, 0, 0.961641, -0.274312, 0.149984, 0.271209, 0.950763, 0.174861, -2.01608, -0.808489)
+
+[node name="WeaponHolder" type="Node3D" parent="Neck/Head/WeaponArm"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.966824, 0.813251, -0.691407)
+
+[node name="WeaponMesh" type="MeshInstance3D" parent="Neck/Head/WeaponArm/WeaponHolder"]
+transform = Transform3D(0.004, 0, 0, 0, 0.004, 0, 0, 0, 0.004, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_hisyc")
+mesh = ExtResource("7_qdjb6")
+skeleton = NodePath("")
